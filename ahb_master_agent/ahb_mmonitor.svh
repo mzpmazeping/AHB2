@@ -11,7 +11,7 @@ class ahb_mmonitor extends uvm_monitor;
 
         `uvm_component_utils(ahb_mmonitor)
 
-        virtual ahb_intf.MMON_MP vif;
+        virtual ahb_intf vif;
         ahb_magent_config magt_cfg;
         ahb_mxtn xtn;
 
@@ -24,7 +24,7 @@ class ahb_mmonitor extends uvm_monitor;
         extern function new(string name = "ahb_mmonitor", uvm_component parent);
         extern function void build_phase(uvm_phase phase);
         extern function void connect_phase(uvm_phase phase);
-        extern task run_phase(uvm_phase phase);
+        extern task main_phase(uvm_phase phase);
         extern task create_beat();
         extern task monitor_beat();
 
@@ -52,7 +52,7 @@ endclass: ahb_mmonitor
         endfunction
 
         //Run
-        task ahb_mmonitor::run_phase(uvm_phase phase);
+        task ahb_mmonitor::main_phase(uvm_phase phase);
                 forever
                 begin
                         create_beat();
@@ -68,7 +68,7 @@ endclass: ahb_mmonitor
                                         while(!vif.HRESETn)
                                         begin
                                                 xtn.reset = 0;
-                                                $cast(xtn.trans_type[0], vif.mmon_cb.HTRANS);
+                                                $cast(xtn.trans_type[0], vif.HTRANS);
                                                 monitor_ap.write(xtn);
                                                 @(vif.mmon_cb);
                                         end
@@ -91,7 +91,7 @@ endclass: ahb_mmonitor
         task ahb_mmonitor::monitor_beat();
         begin:mon1
 
-                $cast(xtn.trans_type[0], vif.mmon_cb.HTRANS);
+                $cast(xtn.trans_type[0], vif.HTRANS);
 
                 if(xtn.trans_type[0] == IDLE)
                 begin

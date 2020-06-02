@@ -21,7 +21,8 @@ class ahb_mdriver extends uvm_driver#(ahb_mxtn);
         extern function new(string name = "ahb_mdriver", uvm_component parent);
         extern function void build_phase(uvm_phase phase);
         extern function void connect_phase(uvm_phase phase);
-        extern task run_phase(uvm_phase phase);
+        extern task main_phase(uvm_phase phase);
+        extern task reset_phase(uvm_phase phase);        
         extern task drive();
 
 endclass: ahb_mdriver
@@ -46,8 +47,21 @@ endclass: ahb_mdriver
                 vif = magt_cfg.vif;
         endfunction
 
+
+        //reset_phase
+        task ahb_mdriver::reset_phase(uvm_phase phase);
+                phase.raise_objection(this);
+                        vif.HTRANS <=2'b00;
+                        vif.HBURST <=2'b00;
+                        vif.HSIZE  <=2'b00;
+                        vif.HWRITE <=2'b00;
+                        vif.HADDR  <=2'b00;
+                        vif.HWDATA <=2'b00;
+                phase.drop_objection(this);
+        endtask
+
         //Run
-        task ahb_mdriver::run_phase(uvm_phase phase);
+        task ahb_mdriver::main_phase(uvm_phase phase);
                 forever
                 begin
                         seq_item_port.get_next_item(req);

@@ -37,7 +37,6 @@ interface ahb_intf(input logic HCLK);
         clocking mmon_cb@(posedge HCLK);
                 default input #1 output #0;
 
-                input HRESETn;
                 input HREADY;
                 input HTRANS;
                 input HBURST;
@@ -45,7 +44,6 @@ interface ahb_intf(input logic HCLK);
                 input HWRITE;
                 input HADDR;
                 input HWDATA;
-                input HREADY;
                 input HRESP;
                 input HRDATA;
 
@@ -76,7 +74,6 @@ interface ahb_intf(input logic HCLK);
                 input HWRITE;
                 input HADDR;
                 input HWDATA;
-                input HREADY;
                 input HRESP;
                 input HRDATA;
 

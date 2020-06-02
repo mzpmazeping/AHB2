@@ -10,7 +10,7 @@ class ahb_sdriver extends uvm_driver#(ahb_sxtn);
 
         `uvm_component_utils(ahb_sdriver)
 
-        virtual ahb_intf.SDRV_MP vif;
+        virtual ahb_intf vif;
         ahb_sagent_config sagt_cfg;
 
 
@@ -21,7 +21,8 @@ class ahb_sdriver extends uvm_driver#(ahb_sxtn);
         extern function new(string name = "ahb_sdriver", uvm_component parent);
         extern function void build_phase(uvm_phase phase);
         extern function void connect_phase(uvm_phase phase);
-        extern task run_phase(uvm_phase phase);
+        extern task main_phase(uvm_phase phase);
+        extern task reset_phase(uvm_phase phase);        
         extern task drive();
         extern task reset_();
 
@@ -47,8 +48,16 @@ endclass: ahb_sdriver
                 vif = sagt_cfg.vif;
         endfunction
 
+        //reset_phase
+        task ahb_sdriver::reset_phase(uvm_phase phase);
+                vif.HRESP  <=2'b00;
+                vif.HRDATA <=2'b00;
+                vif.HREADY <=2'b00;
+        endtask 
+
+
         //Run
-        task ahb_sdriver::run_phase(uvm_phase phase);
+        task ahb_sdriver::main_phase(uvm_phase phase);
                 forever
                 begin
                         seq_item_port.get_next_item(req);

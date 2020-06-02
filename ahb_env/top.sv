@@ -32,5 +32,13 @@ module top;
 
         end
 
+        initial begin
+                $fsdbAutoSwitchDumpfile(2048,"top.fsdb",5,"top.fsdb.log");
+                $fsdbDumpflush;
+                $fsdbDumpvars(0,top,"+all");
+                $fsdbDumpon;
+                $fsdbDumpflush;
+        end 
+
 endmodule
 

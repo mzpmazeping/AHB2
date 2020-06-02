@@ -24,7 +24,7 @@ class ahb_smonitor extends uvm_monitor;
         extern function new(string name = "ahb_smonitor", uvm_component parent);
         extern function void build_phase(uvm_phase phase);
         extern function void connect_phase(uvm_phase phase);
-        extern task run_phase(uvm_phase phase);
+        extern task main_phase(uvm_phase phase);
         extern task monitor();
 
 endclass: ahb_smonitor
@@ -53,7 +53,7 @@ endclass: ahb_smonitor
         endfunction
 
         //Run
-        task ahb_smonitor::run_phase(uvm_phase phase);
+        task ahb_smonitor::main_phase(uvm_phase phase);
                 forever
                 begin
                         fork
@@ -81,12 +81,12 @@ endclass: ahb_smonitor
 
                 do
                 begin: collect
-                        $cast(xtn.trans_type, vif.mmon_cb.HTRANS);
-                        $cast(xtn.burst_mode, vif.mmon_cb.HBURST);
-                        $cast(xtn.trans_size, vif.mmon_cb.HSIZE);
-                        $cast(xtn.read_write, vif.mmon_cb.HWRITE);
-                        $cast(xtn.response, vif.mmon_cb.HRESP);
-                        xtn.address.push_back(vif.mmon_cb.HADDR);
+                        $cast(xtn.trans_type, vif.HTRANS);
+                        $cast(xtn.burst_mode, vif.HBURST);
+                        $cast(xtn.trans_size, vif.HSIZE);
+                        $cast(xtn.read_write, vif.HWRITE);
+                        $cast(xtn.response, vif.HRESP);
+                        xtn.address.push_back(vif.HADDR);
 
                         if((xtn.trans_type == IDLE) && (vif.HRESETn == 1))
                         begin
